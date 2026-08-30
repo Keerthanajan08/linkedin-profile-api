@@ -171,10 +171,6 @@ fly secrets set LINKEDIN_COOKIE_STRING=... LINKEDIN_USER_AGENT=... API_KEY=...
 fly deploy
 ```
 
-Use a **secondary/throwaway LinkedIn account** under your own real
-identity, not a personal one and not a fabricated one — see Known
-Limitations.
-
 ## API
 
 ### `GET /health`
@@ -241,6 +237,26 @@ Example response shape:
   "_cache_hit": false
 }
 ```
+**Screenshots — same response, live:**
+
+![Sample response](screenshots/sample-response.png)
+*A live response — topcard, about, and experience, all real data.*
+
+![Skills example](screenshots/skills.png)
+*Skills — 25 real entries, extracted via an aria-label anchor to avoid
+the ambiguous skill/context pairing described in Approach.*
+
+![Certifications example](screenshots/certifications.png)
+*Certifications — fetched via the same reverse-engineered pagination
+endpoint (see Approach above).*
+
+![Languages example](screenshots/languages.png)
+*Languages — the simplest section, clean (language, proficiency)
+pairs.*
+
+![Profile photo URL loaded](screenshots/profile-photo-loaded.png)
+*The `profile_image` URL above, opened directly — not just present as
+text, actually resolves to the real photo.*
 
 ## Error handling
 
