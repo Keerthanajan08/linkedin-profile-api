@@ -3,8 +3,6 @@
 Accepts a LinkedIn profile URL and returns structured JSON with the
 information visible on that profile.
 
-![Sample response](screenshots/sample-response.png)
-
 ## Approach
 
 No browser is used anywhere in this service — every request LinkedIn
