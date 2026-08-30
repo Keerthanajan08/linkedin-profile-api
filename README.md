@@ -242,7 +242,7 @@ Example response shape:
 
 ![Skills example](screenshots/skills.PNG)
 
-*Skills — 25 real entries, extracted via an aria-label anchor to avoid
+*Education and Skills — 25 real entries, extracted via an aria-label anchor to avoid
 the ambiguous skill/context pairing described in Approach.*
 
 ![Certifications example](screenshots/certifications.PNG)
