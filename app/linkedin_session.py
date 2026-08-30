@@ -120,9 +120,23 @@ class LinkedInSession:
         """Shared by both cookie-based login paths: confirm the loaded
         cookies actually authenticate, by making one cheap real call."""
         headers = {"csrf-token": self._current_csrf_token(), "Referer": "https://www.linkedin.com/"}
+        # allow_redirects=False on purpose (see get()/get_html() for the
+        # same reasoning): invalid/incomplete cookies get redirected
+        # toward a login page, which can loop until requests gives up
+        # with an unhelpful "Exceeded 30 redirects" crash instead of a
+        # clear error — confirmed happening on a real deployment.
         r = self.session.get(
-            "https://www.linkedin.com/voyager/api/me", headers=headers, timeout=15
+            "https://www.linkedin.com/voyager/api/me", headers=headers, timeout=15, allow_redirects=False
         )
+        if r.is_redirect or r.status_code in (301, 302, 303, 307, 308):
+            raise AuthError(
+                "LinkedIn redirected instead of authenticating — the cookies "
+                "are likely invalid, incomplete, or expired (or, if this is "
+                "the very first request from a new deployment/IP, LinkedIn "
+                "may be treating the session as untrusted from that origin). "
+                "Verify LINKEDIN_COOKIE_STRING is the complete, unmodified "
+                "value copied from DevTools, or re-copy fresh cookies."
+            )
         if r.status_code != 200:
             raise AuthError(
                 f"Provided cookies did not authenticate (status {r.status_code}). "
