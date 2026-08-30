@@ -3,8 +3,6 @@
 Accepts a LinkedIn profile URL and returns structured JSON with the
 information visible on that profile.
 
-![Sample response](screenshots/sample-response.png)
-
 ## Approach
 
 No browser is used anywhere in this service — every request LinkedIn
@@ -171,10 +169,6 @@ fly secrets set LINKEDIN_COOKIE_STRING=... LINKEDIN_USER_AGENT=... API_KEY=...
 fly deploy
 ```
 
-Use a **secondary/throwaway LinkedIn account** under your own real
-identity, not a personal one and not a fabricated one — see Known
-Limitations.
-
 ## API
 
 ### `GET /health`
@@ -241,6 +235,29 @@ Example response shape:
   "_cache_hit": false
 }
 ```
+**Screenshots — same response, live:**
+
+![Sample response](screenshots/sample-response.PNG)
+*A live response — topcard, about, and experience, all real data.*
+
+![Skills example](screenshots/skills.PNG)
+
+*Education and Skills — 25 real entries, extracted via an aria-label anchor to avoid
+the ambiguous skill/context pairing described in Approach.*
+
+![Certifications example](screenshots/certifications.PNG)
+
+*Certifications — fetched via the same reverse-engineered pagination
+endpoint (see Approach above).*
+
+![Languages example](screenshots/languages.PNG)
+*Languages — the simplest section, clean (language, proficiency)
+pairs.*
+
+![Profile photo URL loaded](screenshots/profile-photo-loaded.PNG)
+
+*The `profile_image` URL above, opened directly — not just present as
+text, actually resolves to the real photo.*
 
 ## Error handling
 
@@ -262,16 +279,6 @@ Example response shape:
   rotate on redeploy. A significant frontend change on LinkedIn's side
   could affect an individual section without affecting the others.
 - **Private or restricted profiles:** The amount of information 
-returned depends on what is available to the authenticated 
-account. Certain fields may be unavailable for private or 
-restricted profiles.
-- **Private/restricted profiles**: fields gated by the target's privacy
-  settings, or by the backing account's network distance to them, may
-  come back partial or missing.
-- **ToS**: this violates LinkedIn's User Agreement (automated access to
-  non-public endpoints) — built as a technical exercise; production use
-  carries real legal/account risk. Notably, PhantomBuster's own
-  comparable no-browser tool — the reference example for this
-  challenge — documents getting *less* than this project does (no
-  profile photo, only the 2 most recent jobs) without falling back to
-  actual browser automation for full data.
+  returned depends on what is available to the authenticated 
+  account. Certain fields may be unavailable for private or 
+  restricted profiles.
