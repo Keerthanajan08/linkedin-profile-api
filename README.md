@@ -278,7 +278,7 @@ text, actually resolves to the real photo.*
   component key) rather than LinkedIn's hashed CSS classes, which
   rotate on redeploy. A significant frontend change on LinkedIn's side
   could affect an individual section without affecting the others.
-  - **Session-based authentication:** the service establishes an
+- **Session-based authentication:** the service establishes an
   authenticated LinkedIn session at startup and reuses it for
   subsequent requests. LinkedIn provides no official token-refresh
   mechanism, so if the upstream session expires or is invalidated,
