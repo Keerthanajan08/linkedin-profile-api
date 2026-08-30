@@ -4,6 +4,7 @@ Accepts a LinkedIn profile URL and returns structured JSON with the
 information visible on that profile.
 
 **Live deployment**: https://linkedin-profile-api-qs8k.onrender.com
+
 **Demo video**: [Loom link](https://www.loom.com/share/993c8b83cc7d46a6b0882ef6a3805aa9)
 
 ## Approach
