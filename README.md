@@ -262,16 +262,6 @@ Example response shape:
   rotate on redeploy. A significant frontend change on LinkedIn's side
   could affect an individual section without affecting the others.
 - **Private or restricted profiles:** The amount of information 
-returned depends on what is available to the authenticated 
-account. Certain fields may be unavailable for private or 
-restricted profiles.
-- **Private/restricted profiles**: fields gated by the target's privacy
-  settings, or by the backing account's network distance to them, may
-  come back partial or missing.
-- **ToS**: this violates LinkedIn's User Agreement (automated access to
-  non-public endpoints) — built as a technical exercise; production use
-  carries real legal/account risk. Notably, PhantomBuster's own
-  comparable no-browser tool — the reference example for this
-  challenge — documents getting *less* than this project does (no
-  profile photo, only the 2 most recent jobs) without falling back to
-  actual browser automation for full data.
+  returned depends on what is available to the authenticated 
+  account. Certain fields may be unavailable for private or 
+  restricted profiles.
