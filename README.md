@@ -3,6 +3,9 @@
 Accepts a LinkedIn profile URL and returns structured JSON with the
 information visible on that profile.
 
+**Live deployment**: https://linkedin-profile-api-qs8k.onrender.com
+**Demo video**: [Loom link](https://www.loom.com/share/993c8b83cc7d46a6b0882ef6a3805aa9)
+
 ## Approach
 
 No browser is used anywhere in this service — every request LinkedIn
@@ -186,8 +189,7 @@ window are served from cache instead of re-hitting LinkedIn. Each
 response includes `"_cache_hit": true/false`.
 
 ```bash
-curl "https://your-deployment.example.com/profile?url=https://www.linkedin.com/in/someone" \
-  -H "x-api-key: your-key"
+curl "https://linkedin-profile-api-qs8k.onrender.com/profile?url=https://www.linkedin.com/in/someone"
 ```
 
 Example response shape:
@@ -278,6 +280,11 @@ text, actually resolves to the real photo.*
   component key) rather than LinkedIn's hashed CSS classes, which
   rotate on redeploy. A significant frontend change on LinkedIn's side
   could affect an individual section without affecting the others.
+  - **Session-based authentication:** the service establishes an
+  authenticated LinkedIn session at startup and reuses it for
+  subsequent requests. LinkedIn provides no official token-refresh
+  mechanism, so if the upstream session expires or is invalidated,
+  the service requires a fresh authenticated session to be supplied.
 - **Private or restricted profiles:** The amount of information 
   returned depends on what is available to the authenticated 
   account. Certain fields may be unavailable for private or 
