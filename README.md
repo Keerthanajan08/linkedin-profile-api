@@ -241,10 +241,12 @@ Example response shape:
 *A live response — topcard, about, and experience, all real data.*
 
 ![Skills example](screenshots/skills.PNG)
+
 *Skills — 25 real entries, extracted via an aria-label anchor to avoid
 the ambiguous skill/context pairing described in Approach.*
 
 ![Certifications example](screenshots/certifications.PNG)
+
 *Certifications — fetched via the same reverse-engineered pagination
 endpoint (see Approach above).*
 
@@ -253,6 +255,7 @@ endpoint (see Approach above).*
 pairs.*
 
 ![Profile photo URL loaded](screenshots/profile-photo-loaded.PNG)
+
 *The `profile_image` URL above, opened directly — not just present as
 text, actually resolves to the real photo.*
 
