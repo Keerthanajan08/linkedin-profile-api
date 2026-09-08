@@ -97,11 +97,25 @@ class LinkedInSession:
         captured token causes a CSRF mismatch on later requests, which
         LinkedIn answers with a redirect that looks like "session expired"
         even though the underlying li_at session is still fine.
+
+        Uses cookiejar.get(name=...) rather than the simpler
+        cookies.get("JSESSIONID"), because a long-running process can
+        accumulate more than one cookie named JSESSIONID over many days
+        (LinkedIn setting it again with different domain/path scoping on
+        different responses) — confirmed live after several days of
+        continuous uptime. The simpler .get() raises CookieConflictError
+        ("There are multiple cookies with name...") the moment that
+        happens; iterating and picking one explicitly avoids the crash.
         """
-        current = self.session.cookies.get("JSESSIONID")
-        if not current:
+        matches = [c for c in self.session.cookies if c.name == "JSESSIONID"]
+        if not matches:
             raise AuthError("No JSESSIONID cookie present — not logged in.")
-        return current.strip('"')
+        # Prefer a cookie scoped to www.linkedin.com specifically, if one
+        # of the duplicates is; otherwise any match works equally well
+        # for our purposes (the token value itself is what's compared,
+        # not the exact cookie scoping).
+        preferred = next((c for c in matches if "www.linkedin.com" in (c.domain or "")), matches[0])
+        return preferred.value.strip('"')
 
     def login(self):
         if self.cookie_string:
@@ -155,7 +169,11 @@ class LinkedInSession:
             name, _, value = part.partition("=")
             self.session.cookies.set(name.strip(), value.strip(), domain=".linkedin.com")
 
-        if not self.session.cookies.get("li_at") or not self.session.cookies.get("JSESSIONID"):
+        # Existence check via a name comparison (not cookies.get(), which
+        # raises CookieConflictError on duplicates — see _current_csrf_token
+        # for why that can happen).
+        cookie_names = {c.name for c in self.session.cookies}
+        if "li_at" not in cookie_names or "JSESSIONID" not in cookie_names:
             raise AuthError(
                 "LINKEDIN_COOKIE_STRING didn't contain li_at and/or JSESSIONID — "
                 "make sure you copied the full Cookie header value, not a partial one."
@@ -176,15 +194,15 @@ class LinkedInSession:
         r = self.session.get("https://www.linkedin.com/login", timeout=15)
         r.raise_for_status()
 
-        jsessionid = self.session.cookies.get("JSESSIONID")
-        if not jsessionid:
+        try:
+            csrf = self._current_csrf_token()
+        except AuthError:
             raise AuthError("Did not receive an initial JSESSIONID cookie — LinkedIn's login page structure may have changed.")
 
-        csrf = jsessionid.strip('"')
         payload = {
             "session_key": self.email,
             "session_password": self.password,
-            "JSESSIONID": jsessionid,
+            "JSESSIONID": f'"{csrf}"',
         }
         headers = {"csrf-token": csrf}
 
