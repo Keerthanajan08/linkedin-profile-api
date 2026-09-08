@@ -5,6 +5,8 @@ information visible on that profile.
 
 **Live deployment**: https://linkedin-profile-api-qs8k.onrender.com
 
+**Try it now (working example)**: https://linkedin-profile-api-qs8k.onrender.com/profile?url=https://www.linkedin.com/in/keerthana-sasidaran-64ba24368/
+
 **Demo video**: [Loom link](https://www.loom.com/share/993c8b83cc7d46a6b0882ef6a3805aa9)
 
 ## Approach
